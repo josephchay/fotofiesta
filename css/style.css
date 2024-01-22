@@ -1,0 +1,303 @@
+/*@-ms-viewport {*/
+/*  width: device-width;*/
+/*}*/
+
+* {
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 600;
+}
+
+*::selection {
+  background-color: #fff;
+  color: #000;
+}
+
+@font-face {
+  font-family: "supply";
+  src: url(../fonts/AqueneRegular.otf);
+}
+
+html {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+  font-family: "supply", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.header__right {
+  position: absolute;
+  z-index: 100;
+  color: rgb(106, 106, 106);
+  font-size: 0.8em;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  border-radius: 0.2rem;
+  border: none;
+  top: 10em;
+  right: -7em;
+  transform: rotate(90deg);
+  border-bottom: 0.3rem solid transparent;
+  transition: all 0.3s;
+}
+
+.header__right b {
+  color: #fff;
+}
+
+.canvas {
+  position: absolute;
+  filter: grayscale(1) brightness(2);
+  opacity: 50%;
+  transition: 1s ease-in-out;
+}
+
+.canvas:active {
+  filter: grayscale(0) brightness(1);
+  opacity: 100%;
+}
+
+.input {
+  position: absolute;
+  z-index: 100;
+  color: rgb(224, 224, 224);
+  font-size: 1.2em;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  border-radius: 0.2rem;
+  background-color: rgba(37, 37, 37, 0.555);
+  border: none;
+  width: 12em;
+  bottom: 3.5em;
+  left: 2em;
+
+  border-bottom: 0.3rem solid transparent;
+  transition: all 0.3s;
+}
+
+.button {
+  transform-origin: center;
+  display: flex;
+  justify-content: center;
+  /*position: absolute;*/
+  pointer-events: auto;
+  cursor: pointer;
+  background: #fff;
+  border: none;
+  padding: 1.5rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  position: relative;
+  z-index: 100;
+}
+
+.button::before,
+.button::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inspired from https://oreillymedia.github.io/Using_SVG/extras/ch07-textpaths.html for <textPath> */
+
+/*.logo {*/
+/*  position: absolute;*/
+/*  padding: 0;*/
+/*  background: none;*/
+/*  -webkit-clip-path: circle(40% at 50% 50%);*/
+/*  clip-path: circle(40% at 50% 50%);*/
+/*}*/
+
+.logo {
+  position: absolute;
+  background: none;
+  color: #ececec;
+  font-size: 24px;
+}
+
+.logo:focus-visible {
+  background: #443ffc;
+}
+
+.logo__rim {
+  position: relative;
+  display: block;
+  width: 200px;
+}
+
+.logo__rim text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  text-transform: uppercase;
+  fill: rgb(255, 255, 255);
+}
+
+.logo__rim textPath {
+  letter-spacing: 17px;  /* needed by FireFox */
+}
+
+.logo:hover .logo__rim {
+  animation: rotateIt 8s linear infinite;
+}
+
+.logo__bore {
+  position: absolute;
+  z-index: 2;
+  width: 60px;
+  height: 60px;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+}
+
+.eye__outer,
+.eye__inner,
+.eye__lashes-up,
+.eye__lashes-down {
+  stroke: rgb(255, 255, 255);
+  fill: none;
+  stroke-width: 2px;
+}
+
+.eye__lashes-down {
+  opacity: 0;
+}
+
+.logo:hover .eye__lashes-up,
+.logo:hover .eye__inner,
+.logo:hover .eye__iris {
+  animation: blinkHide 2s step-end infinite;
+}
+
+.logo:hover .eye__lashes-down {
+  animation: blinkShow 2s step-end infinite;
+}
+
+@keyframes blinkHide {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+}
+
+@keyframes blinkShow {
+  0% {
+    opacity: 1;
+  }
+
+  10% {
+    opacity: 0;
+  }
+}
+
+.footer__links div {
+  position: absolute;
+  margin: 0;
+  left: 2em;
+}
+
+.footer__credit {
+  position: absolute;
+  margin: 0 auto;
+  padding: 1rem 1.6rem;
+  border: none;
+  border-bottom: 0.3rem solid transparent;
+  border-radius: 0.2rem;
+  left: 0.8em;
+  bottom: 1.5em;
+  color: rgb(106, 106, 106);
+  font-size: 0.8em;
+  text-align: center;
+  z-index: 100;
+  transition: all 0.3s;
+}
+
+.footer__credit span.copy {
+  display: inline-block;
+  font-size: 1.2em;
+}
+
+.footer__credit b {
+  color: #fff;
+}
+
+.footer__links__github {
+  bottom: 9em;
+}
+
+.footer__links__swap {
+  bottom: 5em;
+}
+
+.footer__links__github i,
+.footer__links__swap i {
+  font-size: 20px;
+  color: #fff;
+}
+
+.footer__right .img__holder {
+  position: absolute;
+  margin: 0;
+  right: 5em;
+  bottom: 5em;
+  mix-blend-mode: difference;
+}
+
+.creator img {
+  position: absolute;
+  z-index: 100;
+  margin: 0 auto;
+  top: 3em;
+  right: 3em;
+  width: 5%;
+}
+
+@media only screen and (max-device-width: 500px) {
+  .img__holder {
+    position: absolute;
+    margin: 0;
+    right: 3em;
+    top: 5em;
+  }
+
+  .input {
+    bottom: 3em;
+    left: 2em;
+  }
+
+  .footer__links__github {
+    left: 18em;
+    bottom: 4em;
+  }
+
+  .footer__links__swap {
+    left: 3em;
+    bottom: 4em;
+  }
+
+  h3 {
+    font-size: 0.7em;
+    bottom: 0.5em;
+  }
+}
