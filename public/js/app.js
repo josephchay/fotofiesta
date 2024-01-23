@@ -104,6 +104,16 @@ let gridColumnsCount, gridRowsCount, gridColumns, gridRows, grid
 let widthRest, heightRest, centerX, centerY, container, rects
 let images, imagesUrls
 
+view.addEventListener('mousedown', () => {
+  view.classList.add('active');
+})
+
+view.addEventListener('mouseup', () => {
+  if (view.classList.contains('active')) {
+    view.classList.remove('active');
+  }
+});
+
 /**
  * Set initial values for dimensions.
  */
@@ -162,7 +172,7 @@ function initApp() {
   app.renderer.resize(width, height)
 
   // Set the distortion filter for the entire stage
-  const fragmentShader = fetchShader('stage-fragment')
+  const fragmentShader = fetchShader(shaderIds["stageFragment"])
   const stageFilter = new PIXI.Filter(undefined, fragmentShader, uniforms)
   app.stage.filters = [stageFilter]
 }
@@ -176,7 +186,7 @@ function initBackground() {
   background.width = width
   background.height = height
   // Get the code for the fragment shader from the loaded resources
-  const fragmentShader = fetchShader('background-fragment');
+  const fragmentShader = fetchShader(shaderIds['backgroundFragment']);
 
   // Create a new Filter using the fragment shader
   // no need a custom vertex shader, so we set it as `undefined`
@@ -235,7 +245,7 @@ function loadTextureForImage(index) {
 function initRectsAndImages() {
   // New Graphics element to draw solid rectangles
   const graphics = new PIXI.Graphics();
-  // Select the color for rectangles
+  // Color for rectangles
   graphics.beginFill(0x000000);
 
   rects.forEach((rect) => {
@@ -434,3 +444,12 @@ function onResize() {
 window.addEventListener('resize', onResize)
 
 init()
+
+let swapBtn = document.querySelector(".footer__links__swap button");
+let filterDefault = true;
+
+swapBtn.addEventListener('click', () => {
+  if (!view.classList.contains('active')) {
+    view.classList.toggle('invert');
+  }
+});
