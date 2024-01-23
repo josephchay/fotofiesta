@@ -1,5 +1,7 @@
 # FotoFiesta
 
+![Showcase](https://github.com/josephchay/fotofiesta/assets/136827046/47ec112b-11f5-468e-9d1e-a3d038d23bd5)
+
 ---
 
 # About
