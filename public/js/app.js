@@ -8,7 +8,7 @@ anime.timeline().add({
   opacity: [0, 1],
   easing: 'easeOutExpo',
   duration: 1200,
-  delay: (el, i) => 2400 + 30 * i,
+  delay: (el, i) => 1400 + 30 * i,
 }).add({
   targets: '.preloader__text h1 .letter',
   translateX: [0, -40],
@@ -19,36 +19,36 @@ anime.timeline().add({
   delay: (el, i) => 800 + 30 * i,
 });
 
-gsap.from(".preloader__loader_wrapper", 2, {
-  scale: 0.8,
-  ease: "power1.inOut",
-});
+// gsap.from(".preloader__loader_wrapper", 2, {
+//   scale: 0.8,
+//   ease: "power1.inOut",
+// });
+//
+// gsap.from(".preloader__loader_wrapper div", 2, {
+//   top: "100%",
+//   ease: "power3.inOut",
+// });
+//
+// gsap.to(".preloader__loader", 1, {
+//   scale: 1.5,
+//     opacity: 0,
+//     display: "none",
+//   ease: "power3.inOut",
+//   delay: 2,
+// }, "-=1");
 
-gsap.from(".preloader__loader_wrapper div", 2, {
-  top: "100%",
-  ease: "power3.inOut",
-});
-
-gsap.to(".preloader__loader", 1, {
-  scale: 1.5,
-    opacity: 0,
-    display: "none",
-  ease: "power3.inOut",
-  delay: 2,
-}, "-=1");
-
-gsap.from(".preloader__revealer", 1,  {
-  width: "0",
-  ease: "power3.inOut",
-  delay: 3,
-});
-
-gsap.to(".preloader__revealer", .8,  {
-  width: "100%",
-  ease: "power3.inOut",
-  delay: 4,
-});
-
+// gsap.from(".preloader__revealer", 1,  {
+//   width: "0",
+//   ease: "power3.inOut",
+//   delay: 3,
+// });
+//
+// gsap.to(".preloader__revealer", .8,  {
+//   width: "100%",
+//   ease: "power3.inOut",
+//   delay: 4,
+// });
+//
 gsap.to(".preloader__text", 1, {
   opacity: 0,
   display: "none",
@@ -60,7 +60,7 @@ gsap.from(".button.logo", 1, {
   x: -40,
   opacity: 0,
   ease: "power3.inOut",
-  delay: 4.8,
+  delay: 4,
   stagger: {
     amount: 1,
   },
@@ -70,14 +70,14 @@ gsap.from([".footer__links__github"], 1, {
   x: -40,
   opacity: 0,
   ease: "power3.inOut",
-  delay: 5,
+  delay: 4.2,
 });
 
 gsap.from([".footer__links__swap"], 1, {
   x: -40,
   opacity: 0,
   ease: "power3.inOut",
-  delay: 5.2,
+  delay: 4.4,
 });
 
 const footerCreditSplit = new SplitType(".footer__credit h3");
@@ -86,7 +86,7 @@ gsap.from(footerCreditSplit.chars, {
   y: 40,
   opacity: 0,
   ease: "cubic-bezier(0.23, 1, 0.32, 1)",
-  delay: 5.4,
+  delay: 4.8,
   stagger: 0.01,
 });
 
