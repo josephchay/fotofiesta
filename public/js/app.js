@@ -1,3 +1,95 @@
+const preloaderText = document.querySelector('.preloader__text h1');
+preloaderText.innerHTML = preloaderText.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+anime.timeline().add({
+  targets: '.preloader__text h1 .letter',
+  translateX: [40, 0],
+  translateZ: 0,
+  opacity: [0, 1],
+  easing: 'easeOutExpo',
+  duration: 1200,
+  delay: (el, i) => 2400 + 30 * i,
+}).add({
+  targets: '.preloader__text h1 .letter',
+  translateX: [0, -40],
+  translateZ: 0,
+  opacity: [1, 0],
+  easing: 'easeOutExpo',
+  duration: 1200,
+  delay: (el, i) => 800 + 30 * i,
+});
+
+gsap.from(".preloader__loader_wrapper", 2, {
+  scale: 0.8,
+  ease: "power1.inOut",
+});
+
+gsap.from(".preloader__loader_wrapper div", 2, {
+  top: "100%",
+  ease: "power3.inOut",
+});
+
+gsap.to(".preloader__loader", 1, {
+  scale: 1.5,
+    opacity: 0,
+    display: "none",
+  ease: "power3.inOut",
+  delay: 2,
+}, "-=1");
+
+gsap.from(".preloader__revealer", 1,  {
+  width: "0",
+  ease: "power3.inOut",
+  delay: 3,
+});
+
+gsap.to(".preloader__revealer", .8,  {
+  width: "100%",
+  ease: "power3.inOut",
+  delay: 4,
+});
+
+gsap.to(".preloader__text", 1, {
+  opacity: 0,
+  display: "none",
+  ease: "power3.inOut",
+  delay: 4.4,
+});
+
+gsap.from(".button.logo", 1, {
+  x: -40,
+  opacity: 0,
+  ease: "power3.inOut",
+  delay: 4.8,
+  stagger: {
+    amount: 1,
+  },
+});
+
+gsap.from([".footer__links__github"], 1, {
+  x: -40,
+  opacity: 0,
+  ease: "power3.inOut",
+  delay: 5,
+});
+
+gsap.from([".footer__links__swap"], 1, {
+  x: -40,
+  opacity: 0,
+  ease: "power3.inOut",
+  delay: 5.2,
+});
+
+const footerCreditSplit = new SplitType(".footer__credit h3");
+
+gsap.from(footerCreditSplit.chars, {
+  y: 40,
+  opacity: 0,
+  ease: "cubic-bezier(0.23, 1, 0.32, 1)",
+  delay: 5.4,
+  stagger: 0.01,
+});
+
 const shaderIds = {
   stageFragment: 'stage-fragment',
   backgroundFragment: 'background-fragment',
@@ -441,15 +533,17 @@ function onResize() {
   }, 200)
 }
 
-window.addEventListener('resize', onResize)
+setTimeout(() => {
+  window.addEventListener('resize', onResize)
 
-init()
+  init()
 
-let swapBtn = document.querySelector(".footer__links__swap button");
-let filterDefault = true;
+  let swapBtn = document.querySelector(".footer__links__swap button");
+  let filterDefault = true;
 
-swapBtn.addEventListener('click', () => {
-  if (!view.classList.contains('active')) {
-    view.classList.toggle('invert');
-  }
-});
+  swapBtn.addEventListener('click', () => {
+    if (!view.classList.contains('active')) {
+      view.classList.toggle('invert');
+    }
+  });
+}, 5000);
