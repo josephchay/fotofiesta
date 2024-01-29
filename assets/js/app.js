@@ -98,7 +98,7 @@ const shaderIds = {
 function fetchShader(shaderId) {
   const xhr = new XMLHttpRequest();
 
-  xhr.open('GET', `shaders/${shaderId}.glsl`, false);
+  xhr.open('GET', `assets/shaders/${shaderId}.glsl`, false);
   xhr.send();
 
   return xhr.status === 200 ? xhr.responseText : null;
