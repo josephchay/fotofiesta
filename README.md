@@ -19,6 +19,14 @@ ensuring that the art of photography knows no bounds. **FotoFiesta** – where y
 
 [![Live-Site](https://img.shields.io/website?url=https://josephchay.github.io/fotofiesta/&style=for-the-badge)](https://josephchay.github.io/fotofiesta/)
 
+## Tech Stack
+
+![HTML](https://img.shields.io/badge/-HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
+![CSS](https://img.shields.io/badge/-CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) &nbsp;
+![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) &nbsp;
+![GSAP](https://img.shields.io/badge/-GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white) &nbsp;
+![WebGL](https://img.shields.io/badge/-WebGL-990000?style=for-the-badge&logo=webgl&logoColor=white) &nbsp;
+
 ## Development
 
 Clone the repository:
