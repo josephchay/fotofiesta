@@ -1,3 +1,23 @@
+// ============================================================================
+// UNSPLASH CONFIG
+// Get your Access Key at https://unsplash.com/oauth/applications
+// (use the "Access Key", NOT the "Secret Key")
+// ============================================================================
+const UNSPLASH_ACCESS_KEY = 'xqf0-_U8ey3l4KH18Gl5jT4UvGwlqvtOCc07vrq2Vhw'
+const UNSPLASH_API = 'https://api.unsplash.com'
+
+// Optional filters for /photos/random. Leave as '' to disable.
+// Note: `query` cannot be combined with `collections` or `topics`.
+const UNSPLASH_QUERY = ''          // e.g. 'nature', 'architecture'
+const UNSPLASH_COLLECTIONS = ''    // e.g. '317099,1065976' (comma separated IDs)
+const UNSPLASH_TOPICS = ''         // e.g. 'bo8jQKTaE0Y' (comma separated IDs or slugs)
+const UNSPLASH_CONTENT_FILTER = 'low' // 'low' | 'high'
+
+const PHOTOS_PER_REQUEST = 30      // API maximum is 30
+const POOL_LOW_WATERMARK = 10      // refill the pool when it drops below this
+
+// ============================================================================
+
 const preloaderText = document.querySelector('.preloader__text h1');
 preloaderText.innerHTML = preloaderText.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
 
@@ -19,36 +39,6 @@ anime.timeline().add({
   delay: (el, i) => 800 + 30 * i,
 });
 
-// gsap.from(".preloader__loader_wrapper", 2, {
-//   scale: 0.8,
-//   ease: "power1.inOut",
-// });
-//
-// gsap.from(".preloader__loader_wrapper div", 2, {
-//   top: "100%",
-//   ease: "power3.inOut",
-// });
-//
-// gsap.to(".preloader__loader", 1, {
-//   scale: 1.5,
-//     opacity: 0,
-//     display: "none",
-//   ease: "power3.inOut",
-//   delay: 2,
-// }, "-=1");
-
-// gsap.from(".preloader__revealer", 1,  {
-//   width: "0",
-//   ease: "power3.inOut",
-//   delay: 3,
-// });
-//
-// gsap.to(".preloader__revealer", .8,  {
-//   width: "100%",
-//   ease: "power3.inOut",
-//   delay: 4,
-// });
-//
 gsap.to(".preloader__text", 1, {
   opacity: 0,
   display: "none",
@@ -249,7 +239,7 @@ function initGrid() {
   rects = grid.generateRects();
 
   images = []
-  // Stores image URL and avoid duplicates
+  // Stores the IDs of Unsplash photos already used in the grid, to avoid duplicates
   imagesUrls = {}
 }
 
@@ -298,37 +288,195 @@ function initContainer() {
   app.stage.addChild(container)
 }
 
+// ============================================================================
+// UNSPLASH API
+// ============================================================================
+
+// Photos fetched from the API but not yet assigned to a rectangle
+let photoPool = []
+// The in-flight request for a batch, so we never fire two at once
+let batchRequest = null
+// Set when the API rejects us (bad key / rate limit), so we stop spamming it
+let apiBlocked = false
+
+/**
+ * Fetch a batch of random photos from Unsplash and add them to the pool.
+ * Uses ONE API request for up to 30 photos (demo apps are limited to 50 requests/hour).
+ *
+ * @returns {Promise<void>}
+ */
+function fetchPhotoBatch() {
+  if (apiBlocked) return Promise.resolve()
+  if (batchRequest) return batchRequest
+
+  if (!UNSPLASH_ACCESS_KEY || UNSPLASH_ACCESS_KEY === 'YOUR_ACCESS_KEY') {
+    console.error('[Unsplash] Set UNSPLASH_ACCESS_KEY at the top of app.js')
+    apiBlocked = true
+    return Promise.resolve()
+  }
+
+  const params = new URLSearchParams({
+    count: PHOTOS_PER_REQUEST,
+    content_filter: UNSPLASH_CONTENT_FILTER,
+  })
+  if (UNSPLASH_QUERY) params.set('query', UNSPLASH_QUERY)
+  // The docs say query can't be combined with collections/topics in one request
+  if (!UNSPLASH_QUERY && UNSPLASH_COLLECTIONS) params.set('collections', UNSPLASH_COLLECTIONS)
+  if (!UNSPLASH_QUERY && UNSPLASH_TOPICS) params.set('topics', UNSPLASH_TOPICS)
+
+  batchRequest = fetch(`${UNSPLASH_API}/photos/random?${params}`, {
+    headers: {
+      Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+      'Accept-Version': 'v1',
+    },
+  })
+    .then(async (response) => {
+      const remaining = response.headers.get('X-Ratelimit-Remaining')
+      if (remaining !== null) console.info(`[Unsplash] Requests remaining this hour: ${remaining}`)
+
+      if (response.status === 401) {
+        apiBlocked = true
+        throw new Error('401 Unauthorized: invalid Access Key')
+      }
+      if (response.status === 403) {
+        apiBlocked = true
+        throw new Error('403 Forbidden: rate limit exceeded (demo apps: 50 requests/hour) or missing permissions')
+      }
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}))
+        throw new Error(`${response.status}: ${(body.errors || []).join(', ') || response.statusText}`)
+      }
+
+      const photos = await response.json()
+      // With `count`, the response is always an array
+      photos.forEach((photo) => {
+        if (!imagesUrls[photo.id]) photoPool.push(photo)
+      })
+    })
+    .catch((error) => {
+      console.error('[Unsplash]', error.message)
+    })
+    .finally(() => {
+      batchRequest = null
+    })
+
+  return batchRequest
+}
+
+/**
+ * Take an unused photo from the pool, preferring the one whose aspect ratio
+ * is closest to the target (less cropping). Refills the pool as needed.
+ *
+ * @param {number} aspect - Target width / height
+ * @returns {Promise<Object|null>} - The Unsplash photo object, or null if unavailable
+ */
+async function getPhoto(aspect) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    // Drop anything already used (e.g. random returned a duplicate)
+    photoPool = photoPool.filter((photo) => !imagesUrls[photo.id])
+
+    // Top the pool up in the background before it runs dry
+    if (photoPool.length < POOL_LOW_WATERMARK) fetchPhotoBatch()
+
+    // Nothing to hand out: wait for the in-flight (or a new) request
+    if (!photoPool.length) {
+      await fetchPhotoBatch()
+      continue
+    }
+
+    let bestIndex = 0
+    let bestScore = Infinity
+    photoPool.forEach((photo, i) => {
+      const score = Math.abs(Math.log((photo.width / photo.height) / aspect))
+      if (score < bestScore) {
+        bestScore = score
+        bestIndex = i
+      }
+    })
+
+    const photo = photoPool.splice(bestIndex, 1)[0]
+    imagesUrls[photo.id] = true
+    return photo
+  }
+  return null
+}
+
+/**
+ * Build a resized image URL from the photo's `raw` URL.
+ * Docs: keep the `ixid` parameter (already in `raw`) and hotlink the image.
+ *
+ * @param {Object} photo - Unsplash photo object
+ * @param {number} w - Width in CSS pixels
+ * @param {number} h - Height in CSS pixels
+ * @returns {string}
+ */
+function buildImageUrl(photo, w, h) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  // Cap the size so huge rectangles don't download enormous files
+  const pw = Math.min(Math.round(w * dpr), 2000)
+  const ph = Math.min(Math.round(h * dpr), 2000)
+  const separator = photo.urls.raw.includes('?') ? '&' : '?'
+  return `${photo.urls.raw}${separator}w=${pw}&h=${ph}&fit=crop&crop=entropy&auto=format&q=80`
+}
+
 /**
  * Load texture for an image, giving its index
  *
  * @param index
+ * @param {number} retries - How many times this rect already retried after an image error
  */
-function loadTextureForImage(index) {
+function loadTextureForImage(index, retries = 0) {
   const image = images[index]
-  // Get a random image from Unsplash Source, given image dimensions
-  const url = `https://source.unsplash.com/${image.width}x${image.height}`
   // Get the corresponding rect, to store more data needed (it is a normal Object)
   const rect = rects[index]
-  // Create a new AbortController, to abort fetch if needed
+  // Create a new AbortController, to cancel if the rect leaves the viewport before getting a photo
   const { signal } = (rect.controller = new AbortController())
-  // Fetch the image
-  fetch(url, { signal })
-    .then((response) => {
-      // Get image URL, and if it was downloaded before, load another image
-      // Otherwise, save image URL and set the texture
-      const id = response.url.split('?')[0]
-      if (imagesUrls[id]) {
-        loadTextureForImage(index)
-      } else {
-        imagesUrls[id] = true
-        image.texture = PIXI.Texture.from(response.url)
-        rect.loaded = true
+
+  getPhoto(image.width / image.height).then((photo) => {
+    if (!photo) {
+      // API unavailable. Allow this rect to try again later (unless we're blocked for good)
+      if (!apiBlocked) {
+        setTimeout(() => {
+          rect.discovered = false
+        }, 5000)
       }
-    })
-    .catch(() => {
-      // Catch errors silently, for not showing the following error message if it is aborted:
-      // AbortError: The operation was aborted.
-    });
+      return
+    }
+
+    // Rect left the viewport while we waited: give the photo back to the pool
+    if (signal.aborted) {
+      delete imagesUrls[photo.id]
+      photoPool.unshift(photo)
+      return
+    }
+
+    // From here on the photo is committed to this rect
+    rect.committed = true
+    rect.photo = photo // keep it around, you need it for photographer attribution
+
+    const texture = PIXI.Texture.from(buildImageUrl(photo, image.width, image.height))
+    const baseTexture = texture.baseTexture
+
+    const onLoaded = () => {
+      image.texture = texture
+      rect.loaded = true
+    }
+
+    const onError = () => {
+      // Image failed: free the slot and try another photo (max 3 times)
+      rect.committed = false
+      if (retries < 3) {
+        loadTextureForImage(index, retries + 1)
+      }
+    }
+
+    if (baseTexture.valid) {
+      onLoaded()
+    } else {
+      baseTexture.once('loaded', onLoaded)
+      baseTexture.once('error', onError)
+    }
+  })
 }
 
 /**
@@ -384,9 +532,9 @@ function checkRectsAndImages() {
       }
     } else {
       // The rect is not intersecting
-      // If the rect was discovered before, but the
-      // image is not loaded yet, abort the fetch
-      if (rect.discovered && !rect.loaded) {
+      // If the rect was discovered before, but no photo has been assigned
+      // yet, cancel the pending request
+      if (rect.discovered && !rect.loaded && !rect.committed) {
         rect.discovered = false
         rect.controller.abort()
       }
@@ -482,6 +630,9 @@ function init() {
   initRectsAndImages()
   initEvents()
 
+  // Warm up the pool so the first visible rects get photos immediately
+  fetchPhotoBatch()
+
   // Animation loop, executed on every animation frame
   app.ticker.add(() => {
     // Multiply the values by a coefficient to get a smooth animation
@@ -512,9 +663,9 @@ function clean() {
     .off('pointerupoutside', onPointerUp)
     .off('pointermove', onPointerMove)
 
-  // Abort all fetch calls in progress
+  // Cancel all pending photo requests
   rects.forEach((rect) => {
-    if (rect.discovered && !rect.loaded) {
+    if (rect.discovered && !rect.loaded && !rect.committed) {
       rect.controller.abort()
     }
   });

@@ -1,8 +1,7 @@
 # FotoFiesta
 
----
+## About
 
-# About
 Introducing **FotoFiesta** – where the possibilities are as boundless as your imagination!
 Immerse yourself in an infinite world of captivating visuals,
 where every snapshot tells a unique story. Our photo gallery transcends boundaries,
@@ -12,6 +11,12 @@ From the vibrant colors of sunrise to the moody elegance of dusk,
 Unleash your creativity, share your visual narratives, and join a community where the excitement is limitless.
 Get ready for an extraordinary journey through an infinite photo gallery that celebrates the magic of every click,
 ensuring that the art of photography knows no bounds. **FotoFiesta** – where your memories find eternity.
+
+## Prerequisites
+
+Documentation: https://unsplash.com/documentation
+
+Applications for API Keys: https://unsplash.com/oauth/applications
 
 ## Demo
 
@@ -41,4 +46,24 @@ Navigate to the project directory:
 cd fotofiesta
 ```
 
-Run the `index.html` file in your browser.
+Run 
+```
+npm i
+```
+
+Create an app at https://unsplash.com/oauth/applications and copy the Access Key, not the Secret Key.
+
+Paste the key into `UNSPLASH_ACCESS_KEY` at the top of `app.js`.
+
+Serve the site over HTTP either with:
+```
+npx serve
+``` 
+
+or 
+
+```
+python3 -m http.server
+``` 
+
+and keep the `assets/...` folder layout from before or live server in any given extension or platform.
