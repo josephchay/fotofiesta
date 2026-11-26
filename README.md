@@ -16,13 +16,13 @@ According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14
 
 ## Demo
 
-![Showcase](miscellanoues/ss1)
-![Showcase2](miscellanoues/ss2)
-![Showcase3](miscellanoues/ss3)
-![Showcase4](miscellanoues/ss4)
-![Showcase4](miscellanoues/ss5-inverted)
-![Showcase4](miscellanoues/ss6-inverted-transition)
-![Showcase4](miscellanoues/ss7)
+![Showcase](miscellanoues/ss1.png)
+![Showcase2](miscellanoues/ss2.png)
+![Showcase3](miscellanoues/ss3.png)
+![Showcase4](miscellanoues/ss4.png)
+![Showcase4](miscellanoues/ss5-inverted.png)
+![Showcase4](miscellanoues/ss6-inverted-transition.png)
+![Showcase4](miscellanoues/ss7.png)
 
 [![Live-Site](https://img.shields.io/website?url=https://josephchay.github.io/fotofiesta/&style=for-the-badge)](https://josephchay.github.io/fotofiesta/)
 
@@ -58,6 +58,12 @@ npm start
 > Paste your Unsplash Access Key into the terminal when prompted. Do not use your Secret Key.
 
 ## Trivia
+
+### Synopsis
+
+Explore an endless gallery of captivating photography that surrounds you. Immerse yourself in the beauty of an infinite scrolling showcase
+
+### Content
 
 Introducing **FotoFiesta** – where the possibilities are as boundless as your imagination!
 Immerse yourself in an infinite world of captivating visuals,
