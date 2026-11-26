@@ -16,13 +16,13 @@ According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14
 
 ## Demo
 
-![Showcase](miscellanoues/ss1.png)
-![Showcase2](miscellanoues/ss2.png)
-![Showcase3](miscellanoues/ss3.png)
-![Showcase4](miscellanoues/ss4.png)
-![Showcase4](miscellanoues/ss5-inverted.png)
-![Showcase4](miscellanoues/ss6-inverted-transition.png)
-![Showcase4](miscellanoues/ss7.png)
+![Showcase](miscellaneous/ss1.png)
+![Showcase2](miscellaneous/ss2.png)
+![Showcase3](miscellaneous/ss3.png)
+![Showcase4](miscellaneous/ss4.png)
+![Showcase4](miscellaneous/ss5-inverted.png)
+![Showcase4](miscellaneous/ss6-inverted-transition.png)
+![Showcase4](miscellaneous/ss7.png)
 
 [![Live-Site](https://img.shields.io/website?url=https://josephchay.github.io/fotofiesta/&style=for-the-badge)](https://josephchay.github.io/fotofiesta/)
 
