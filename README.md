@@ -1,16 +1,8 @@
-# FotoFiesta
+# FotoFiesta - Adaptation of Unsplash
 
 ## About
 
-Introducing **FotoFiesta** – where the possibilities are as boundless as your imagination!
-Immerse yourself in an infinite world of captivating visuals,
-where every snapshot tells a unique story. Our photo gallery transcends boundaries,
-offering an endless voyage through the artistry of pixels.
-From the vibrant colors of sunrise to the moody elegance of dusk,
-**FotoFiesta** is the portal to an ever-expanding universe of breathtaking moments.
-Unleash your creativity, share your visual narratives, and join a community where the excitement is limitless.
-Get ready for an extraordinary journey through an infinite photo gallery that celebrates the magic of every click,
-ensuring that the art of photography knows no bounds. **FotoFiesta** – where your memories find eternity.
+Attempt to recreate photography library feature for https://unsplash.com/
 
 ## Prerequisites
 
@@ -18,9 +10,19 @@ Documentation: https://unsplash.com/documentation
 
 Applications for API Keys: https://unsplash.com/oauth/applications
 
+According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14ad323e83:
+1. Access Key (public): identifies your app. It's all you need for public actions like fetching photos, and it's what your code uses.
+2. Secret Key (private): used only in the OAuth flow, to exchange an authorization code for a user's access token. You need it only if your app acts on behalf of a logged-in Unsplash user, for example to like photos, manage their collections or upload photos.
+
 ## Demo
 
-![Showcase](https://github.com/josephchay/fotofiesta/assets/136827046/47ec112b-11f5-468e-9d1e-a3d038d23bd5)
+![Showcase](miscellanoues/ss1)
+![Showcase2](miscellanoues/ss2)
+![Showcase3](miscellanoues/ss3)
+![Showcase4](miscellanoues/ss4)
+![Showcase4](miscellanoues/ss5-inverted)
+![Showcase4](miscellanoues/ss6-inverted-transition)
+![Showcase4](miscellanoues/ss7)
 
 [![Live-Site](https://img.shields.io/website?url=https://josephchay.github.io/fotofiesta/&style=for-the-badge)](https://josephchay.github.io/fotofiesta/)
 
@@ -49,21 +51,20 @@ cd fotofiesta
 Run 
 ```
 npm i
+npm start
 ```
 
-Create an app at https://unsplash.com/oauth/applications and copy the Access Key, not the Secret Key.
+> [!NOTE]
+> Paste your Unsplash Access Key into the terminal when prompted. Do not use your Secret Key.
 
-Paste the key into `UNSPLASH_ACCESS_KEY` at the top of `app.js`.
+## Trivia
 
-Serve the site over HTTP either with:
-```
-npx serve
-``` 
-
-or 
-
-```
-python3 -m http.server
-``` 
-
-and keep the `assets/...` folder layout from before or live server in any given extension or platform.
+Introducing **FotoFiesta** – where the possibilities are as boundless as your imagination!
+Immerse yourself in an infinite world of captivating visuals,
+where every snapshot tells a unique story. Our photo gallery transcends boundaries,
+offering an endless voyage through the artistry of pixels.
+From the vibrant colors of sunrise to the moody elegance of dusk,
+**FotoFiesta** is the portal to an ever-expanding universe of breathtaking moments.
+Unleash your creativity, share your visual narratives, and join a community where the excitement is limitless.
+Get ready for an extraordinary journey through an infinite photo gallery that celebrates the magic of every click,
+ensuring that the art of photography knows no bounds. **FotoFiesta** – where your memories find eternity.

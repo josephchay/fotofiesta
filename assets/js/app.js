@@ -3,7 +3,7 @@
 // Get your Access Key at https://unsplash.com/oauth/applications
 // (use the "Access Key", NOT the "Secret Key")
 // ============================================================================
-const UNSPLASH_ACCESS_KEY = 'xqf0-_U8ey3l4KH18Gl5jT4UvGwlqvtOCc07vrq2Vhw'
+const UNSPLASH_ACCESS_KEY = 'YOUR_ACCESS_KEY'
 const UNSPLASH_API = 'https://api.unsplash.com'
 
 // Optional filters for /photos/random. Leave as '' to disable.
@@ -454,16 +454,32 @@ function loadTextureForImage(index, retries = 0) {
     rect.committed = true
     rect.photo = photo // keep it around, you need it for photographer attribution
 
-    const texture = PIXI.Texture.from(buildImageUrl(photo, image.width, image.height))
+    // Remember the size this rect should be displayed at
+    const targetW = image.width
+    const targetH = image.height
+
+    const texture = PIXI.Texture.from(buildImageUrl(photo, targetW, targetH))
     const baseTexture = texture.baseTexture
 
-    const onLoaded = () => {
-      image.texture = texture
+    // Assign the texture right away (even though it hasn't loaded yet).
+    // The sprite then subscribes to the texture's 'update' event and rescales
+    // itself once the real image dimensions are known. Assigning it only
+    // after 'loaded' makes PixiJS 5.0.2 scale a 1x1 texture up to the rect
+    // size, which shows up as flat single-colour blocks.
+    image.texture = texture
+
+    const onReady = () => {
+      // Re-apply the display size now that the texture has real dimensions
+      image.width = targetW
+      image.height = targetH
       rect.loaded = true
     }
 
     const onError = () => {
       // Image failed: free the slot and try another photo (max 3 times)
+      image.texture = PIXI.Texture.EMPTY
+      image.width = targetW
+      image.height = targetH
       rect.committed = false
       if (retries < 3) {
         loadTextureForImage(index, retries + 1)
@@ -471,9 +487,9 @@ function loadTextureForImage(index, retries = 0) {
     }
 
     if (baseTexture.valid) {
-      onLoaded()
+      onReady()
     } else {
-      baseTexture.once('loaded', onLoaded)
+      texture.once('update', onReady)
       baseTexture.once('error', onError)
     }
   })
