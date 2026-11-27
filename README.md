@@ -8,7 +8,7 @@ Attempt to recreate photography library feature for https://unsplash.com/
 
 Documentation: https://unsplash.com/documentation
 
-Applications for API Keys: https://unsplash.com/oauth/applications
+Applications for API Keys: https://unsplash.com/oauth/applications. Apply for production to gain `1,000 requests per hour`.
 
 According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14ad323e83:
 1. Access Key (public): identifies your app. It's all you need for public actions like fetching photos, and it's what your code uses.
@@ -24,8 +24,6 @@ According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14
 ![Showcase4](miscellaneous/ss6-inverted-transition.png)
 ![Showcase4](miscellaneous/ss7.png)
 
-[![Live-Site](https://img.shields.io/website?url=https://josephchay.github.io/fotofiesta/&style=for-the-badge)](https://josephchay.github.io/fotofiesta/)
-
 ## Tech Stack
 
 ![HTML](https://img.shields.io/badge/-HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) &nbsp;
@@ -36,19 +34,7 @@ According to Claude AI Chat https://claude.ai/share/2af65b89-f5d0-40ed-93dc-2e14
 
 ## Development
 
-Clone the repository:
-
-```bash
-git clone https://github.com/josephchay/fotofiesta
-```
-
-Navigate to the project directory:
-
-```bash
-cd fotofiesta
-```
-
-Run 
+Execute in terminal:
 ```
 npm i
 npm start
